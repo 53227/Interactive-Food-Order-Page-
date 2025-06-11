@@ -1,0 +1,108 @@
+const items = [
+    {
+      id: 1,
+      name: "Margherita Pizza",
+      price: 299,
+      image: "https://images.unsplash.com/photo-1601924582970-99438d546541?auto=format&fit=crop&w=800&q=80",
+      features: ["Thin crust", "Fresh basil", "Mozzarella"],
+    },
+    {
+      id: 2,
+      name: "Classic Veg Burger",
+      price: 199,
+      image: "https://images.unsplash.com/photo-1550317138-10000687a72b?auto=format&fit=crop&w=800&q=80",
+      features: ["Grilled patty", "Cheddar", "Fries included"],
+    },
+    {
+      id: 3,
+      name: "Creamy Alfredo Pasta",
+      price: 249,
+      image: "https://images.unsplash.com/photo-1588167056542-74a5c61f50ba?auto=format&fit=crop&w=800&q=80",
+      features: ["Fettuccine", "Parmesan", "Garlic bread"],
+    },
+    {
+      id: 4,
+      name: "Caesar Salad",
+      price: 179,
+      image: "https://images.unsplash.com/photo-1566843970551-5fa64781e44c?auto=format&fit=crop&w=800&q=80",
+      features: ["Romaine", "Croutons", "Caesar dressing"],
+    },
+    {
+      id: 5,
+      name: "Sushi Platter",
+      price: 499,
+      image: "https://images.unsplash.com/photo-1579888621052-a122b7e9be1f?auto=format&fit=crop&w=800&q=80",
+      features: ["8 pcs", "Wasabi", "Pickled ginger"],
+    },
+    {
+      id: 6,
+      name: "Chocolate Lava Cake",
+      price: 149,
+      image: "https://images.unsplash.com/photo-1599785209707-28db97e44380?auto=format&fit=crop&w=800&q=80",
+      features: ["Molten center", "Vanilla ice cream"],
+    }
+  ];
+  
+  const menu = document.getElementById("menu");
+  const cartItemsEl = document.getElementById("cartItems");
+  const totalEl = document.getElementById("total");
+  const searchInput = document.getElementById("search");
+  const toggleBtn = document.getElementById("themeToggle");
+  
+  function renderMenu(list) {
+    menu.innerHTML = "";
+    list.forEach((item) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <img src="${item.image}" alt="${item.name}" />
+        <div class="card-content">
+          <div>
+            <h2>${item.name}</h2>
+            <div class="price">₹${item.price}</div>
+            <div class="features">${item.features.join(" · ")}</div>
+          </div>
+          <button class="add-btn" onclick="addToCart(${item.id})">Add</button>
+        </div>
+      `;
+      menu.appendChild(card);
+    });
+  }
+  
+  renderMenu(items);
+  
+  const cart = {};
+  function addToCart(id) {
+    cart[id] = (cart[id] || 0) + 1;
+    updateCart();
+  }
+  
+  function updateCart() {
+    cartItemsEl.innerHTML = "";
+    let total = 0;
+    Object.entries(cart).forEach(([id, qty]) => {
+      const item = items.find(i => i.id == id);
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <span>${item.name} × ${qty}</span>
+        <span>₹${item.price * qty}</span>
+      `;
+      cartItemsEl.appendChild(li);
+      total += item.price * qty;
+    });
+    totalEl.textContent = `Total: ₹${total}`;
+  }
+  
+  searchInput.addEventListener("input", (e) => {
+    const query = e.target.value.toLowerCase();
+    const filtered = items.filter(item =>
+      item.name.toLowerCase().includes(query)
+    );
+    renderMenu(filtered);
+  });
+  
+  toggleBtn.addEventListener("click", () => {
+    document.documentElement.classList.toggle("dark");
+    toggleBtn.textContent = document.documentElement.classList.contains("dark") ? "☀️" : "🌙";
+  });
+  
