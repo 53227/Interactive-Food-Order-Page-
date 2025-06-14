@@ -166,14 +166,19 @@
     overflow-y: auto;
     margin-bottom: 0.75rem;
   }
-  
+
+
+
   #cart li {
     display: flex;
     justify-content: space-between;
     font-size: 0.9rem;
     margin-bottom: 0.4rem;
   }
-  
+
+
+
+
   #total {
     font-weight: 700;
     margin-bottom: 0.5rem;
